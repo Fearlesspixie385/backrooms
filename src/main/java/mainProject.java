@@ -266,7 +266,7 @@ public class mainProject {
 
 
     public void move(){
-        float move = 0.025f;
+        float move = 0.015f;
         float x = objects.get(0).updateCenterPointObject().get(0);
         float y = objects.get(0).updateCenterPointObject().get(1);
         float z = objects.get(0).updateCenterPointObject().get(2);
@@ -301,6 +301,11 @@ public class mainProject {
             }
         }
 
+        //SCP moves
+        if (window.isKeyPressed(GLFW_KEY_Z)) {
+            objects.get(1).translateObjectAnimate(0f, 0f, 0.5f);
+        }
+
         objects.get(0).translateObjectAnimate(movex, 0f, movez);
 
         if (window.isKeyPressed(GLFW_KEY_R)) {
@@ -309,11 +314,6 @@ public class mainProject {
             objects.get(0).rotateObjectAnimate((float) Math.toRadians(20), 0f, 1f, 0f);
             objects.get(0).translateObject(tempCenterPoint.x * 1, tempCenterPoint.y * 1, tempCenterPoint.z * 1);
         }
-
-
-
-
-
     }
     public void input(){
         move();
@@ -351,8 +351,6 @@ public class mainProject {
             for (Object object : objects) {
                 object.draw(camera, projection);
             }
-
-
             Vector2f displayVector = window.getMousInput().getDisplVec();
             camera.addRotation((float) Math.toRadians(displayVector.x * 0.1), (float) Math.toRadians(displayVector.y * 0.1));
 
