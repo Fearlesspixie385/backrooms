@@ -254,10 +254,10 @@ public class Model extends Object {
 
         //posisi pointLight
         Vector3f[] _pointLightPositions = {
-                new Vector3f(0.7f, 0.2f, 2.0f),
-                new Vector3f(2.3f, -3.3f, -4.0f),
-                new Vector3f(-4.0f, 2.0f, -12.0f),
-                new Vector3f(0.0f, 0.0f, -3.0f)
+                new Vector3f(0.0f, 0.9f, 0.0f),
+//                new Vector3f(2.3f, -3.3f, -4.0f),
+//                new Vector3f(-4.0f, 2.0f, -12.0f),
+//                new Vector3f(0.0f, 0.0f, -3.0f)
         };
         for (int i = 0; i < _pointLightPositions.length; i++) {
             uniformsMap.setUniform("pointLights[" + i + "].position", _pointLightPositions[i]);
