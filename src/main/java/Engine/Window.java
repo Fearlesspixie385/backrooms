@@ -2,7 +2,6 @@ package Engine;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
@@ -100,7 +99,9 @@ public class Window {
         // Make the window visible
         glfwShowWindow(window);
 
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);// mouse invisible inf movement
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);// mouse invisible inf movement
+
+        glfwSetCursorPos(window, width/2, height/2);// mouse pos center
 
         mouseInput = new MouseInput(window);
 
@@ -118,7 +119,8 @@ public class Window {
             open = false;
 
         mouseInput.input();
-        glfwSetCursorPos(window, 0, 0);// mouse pos 0 0
+        glfwSetCursorPos(window, width/2, height/2);// mouse pos center
+
     }
 
     public void cleanup(){

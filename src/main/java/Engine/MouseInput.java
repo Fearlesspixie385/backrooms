@@ -13,11 +13,13 @@ public class MouseInput {
     private boolean leftButtonPressed;
     private boolean leftButtonReleased;
     private boolean rightButtonPressed;
+    private Vector2f previousPos;
     private long windowHandle;
 
     public MouseInput(long windowHandle) {
         this.windowHandle = windowHandle;
         currentPos = new Vector2f();
+        previousPos = new Vector2f();
         scroll = new Vector2f();
         displVec = new Vector2f();
         leftButtonPressed = false;
@@ -28,11 +30,13 @@ public class MouseInput {
         glfwSetCursorPosCallback(windowHandle, (handle, xpos, ypos) -> {
             currentPos.x = (float) xpos;
             currentPos.y = (float) ypos;
+            previousPos.x = (float) xpos;
+            previousPos.y = (float) ypos;
         });
         glfwSetCursorEnterCallback(windowHandle, (handle, entered) -> inWindow = entered);
-        glfwSetScrollCallback(windowHandle, (handle, xoffset, yoffset)->{
-            scroll.x = (float)xoffset;
-            scroll.y = (float)yoffset;
+        glfwSetScrollCallback(windowHandle, (handle, xoffset, yoffset) -> {
+            scroll.x = (float) xoffset;
+            scroll.y = (float) yoffset;
         });
         glfwSetMouseButtonCallback(windowHandle, (handle, button, action, mode) -> {
             leftButtonPressed = button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS;
@@ -65,17 +69,13 @@ public class MouseInput {
                 currentPos.x = (float) xpos;
                 currentPos.y = (float) ypos;
             });
-            System.out.println(currentPos);;
-            double deltax = currentPos.x;
-            double deltay = currentPos.y;
-            boolean rotateX = deltax != 0;
-            boolean rotateY = deltay != 0;
-            if (rotateX) {
-                displVec.y = (float) deltax;
-            }
-            if (rotateY) {
-                displVec.x = (float) deltay;
-            }
+
+            double deltax = currentPos.x - previousPos.x;
+            double deltay = currentPos.y - previousPos.y;
+
+            displVec.y = (float) deltax;
+            displVec.x = (float) deltay;
+
         }
 
 

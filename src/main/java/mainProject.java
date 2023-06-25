@@ -253,34 +253,40 @@ public class mainProject {
         float x = objects.get(0).updateCenterPointObject().get(0);
         float y = objects.get(0).updateCenterPointObject().get(1);
         float z = objects.get(0).updateCenterPointObject().get(2);
+
+        System.out.println(Math.toDegrees(camera.getRotation().y));
+
+        float movex = 0;
+        float movez = 0;
+
         //Maju
         if (window.isKeyPressed(GLFW_KEY_W)) {
             if (!checkCollide(x, y, z - 0.1f)) {
-                camera.moveForward(move);
-                objects.get(0).translateObject(0f, 0f, -move);
+                movez += -move;
             }
         }
         //Kiri
         if (window.isKeyPressed(GLFW_KEY_A)) {
             if (!checkCollide(x-0.1f, y, z)) {
-                camera.moveLeft(move);
-                objects.get(0).translateObject(-move, 0f, 0f);
+                movex += -move;
             }
         }
         //Mundur
         if (window.isKeyPressed(GLFW_KEY_S)) {
             if (!checkCollide(x, y, z + 0.1f)) {
-                camera.moveBackwards(move);
-                objects.get(0).translateObject(0f, 0f, move);
+                movez += move;
             }
         }
         //Kanan
         if (window.isKeyPressed(GLFW_KEY_D)) {
             if (!checkCollide(x+0.1f, y, z)) {
-                camera.moveRight(move);
-                objects.get(0).translateObject(move, 0f, 0f);
+                movex += move;
             }
         }
+
+        movex = (float) (movex / Math.cos(camera.getRotation().y));
+
+        objects.get(0).translateObjectAnimate(movex, 0f, movez);
 
         if (window.isKeyPressed(GLFW_KEY_R)) {
             Vector3f tempCenterPoint = objects.get(0).updateCenterPointObject();
@@ -290,13 +296,7 @@ public class mainProject {
         }
 
 
-        if (window.getMousInput().isLeftButtonPressed()) {
-            Vector2f displayVector = window.getMousInput().getDisplVec();
 
-//            camera.addRotation((float) Math.toRadians(displayVector.x * 0.1), (float) Math.toRadians(displayVector.y * 0.1));
-            camera.addRotation(0, (float) Math.toRadians(displayVector.y * 0.1));
-//            objects.get(0).rotateObjectAnimate();
-        }
 
 
     }
@@ -327,15 +327,19 @@ public class mainProject {
             glDisableVertexAttribArray(0);
 //            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            Vector3f tempCenterPoint = objects.get(0).updateCenterPointObject();
+            camera.setPosition(tempCenterPoint.x,tempCenterPoint.y+1.3f,tempCenterPoint.z);
+
             for (Object object : Environment) {
                 object.draw(camera, projection);
             }
             for (Object object : objects) {
                 object.draw(camera, projection);
             }
-            Vector3f tempCenterPoint = objects.get(0).updateCenterPointObject();
 
-            camera.setPosition(tempCenterPoint.x,tempCenterPoint.y+1.3f,tempCenterPoint.z);
+
+            Vector2f displayVector = window.getMousInput().getDisplVec();
+            camera.addRotation((float) Math.toRadians(displayVector.x * 0.1), (float) Math.toRadians(displayVector.y * 0.1));
 
 //            for (Object object : objectsRectangle) {
 //                object.draw(camera, projection);
