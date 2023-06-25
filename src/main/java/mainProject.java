@@ -164,6 +164,23 @@ public class mainProject {
         objects.get(0).rotateObject((float)Math.toRadians(180),0f,1f,0f);
         objects.get(0).scaleObject(0.3f,0.3f,0.3f);
 
+        objects.add(new Model(
+                Arrays.asList(
+                        //shaderFile lokasi menyesuaikan objectnya
+                        new ShaderProgram.ShaderModuleData
+                                ("resources/shaders/scene.vert"
+                                        , GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData
+                                ("resources/shaders/scene.frag"
+                                        , GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0f, 0f, 0f, 0f), "resources/Blender/Project/scp.obj"
+        ));
+        objects.get(1).translateObject(23f,-3.3f,14f);
+        objects.get(1).rotateObject((float)Math.toRadians(90),0f,-1f,0f);
+        objects.get(1).scaleObject(0.185f,0.185f,0.185f);
+
 
 //        System.out.println(Environment.get(0).getVertices());
     }
