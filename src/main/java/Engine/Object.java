@@ -36,6 +36,7 @@ public class Object extends ShaderProgram {
     UniformsMap uniformsMap;
     int vao;
     int vbo;
+    int nbo;
     List<Vector3f> verticesColor;
     int vbocolor;
     int texID;
@@ -92,7 +93,7 @@ public class Object extends ShaderProgram {
         //set texture
 
 //        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        
+//
 //        glBufferData(GL_ARRAY_BUFFER, Utils.listoTexture(textures), GL_STATIC_DRAW);
     }
 
@@ -120,19 +121,19 @@ public class Object extends ShaderProgram {
         uniformsMap.setUniform("model", model);
         uniformsMap.setUniform("view", camera.getViewMatrix());
         uniformsMap.setUniform("projection", projection.getProjMatrix());
-//        uniformsMap.setUniform("hasTexture", 0);
-//        uniformsMap.setUniform("texture_sampler", 0);
+        uniformsMap.setUniform("texture_sampler", 0);
+        uniformsMap.setUniform("hasTexture", hasTexture);
 
         //bind vbo
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
-//        glBindTexture(GL_TEXTURE_2D, texID);
-//        glEnableVertexAttribArray(1);
-//        glActiveTexture(GL_TEXTURE0);
-//        glBindTexture(GL_TEXTURE_2D, texID);
-//        glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
+        glBindTexture(GL_TEXTURE_2D, texID);
+        glEnableVertexAttribArray(1);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texID);
+        glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
     }
 
     public void drawSetupWIthVerticesColor() {
@@ -586,7 +587,7 @@ public class Object extends ShaderProgram {
         return childObject;
     }
 
-    public void readTexture(String texName){
+    public void loadTexture(String texName){
         ByteBuffer buffer;
         int width, height;
 

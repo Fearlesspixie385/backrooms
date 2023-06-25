@@ -34,7 +34,7 @@ public class Model extends Object {
     ArrayList<Vector3f> tempVertices = new ArrayList<>();
     List<Vector2f> tempTexture = new ArrayList<>();
     ArrayList<Vector3f> tempNormal = new ArrayList<>();
-    int nbo;
+
     String filePath;
 
 
@@ -46,20 +46,22 @@ public class Model extends Object {
         createModel();
         setupVAOVBO();
     }
-//    public Model(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color, String filePath, String fileTex) {
-//        super(shaderModuleDataList, vertices, color);
-//        this.filePath = filePath;
-//        createModel();
-//        readTexture(fileTex);
-//        setupVAOVBO();
-//    }
-
-    public Model(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color, String filePath, String condition) {
+    public Model(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color, String filePath, String fileTex) {
         super(shaderModuleDataList, vertices, color);
         this.filePath = filePath;
-        createModel(condition);
+        createModel();
+
         setupVAOVBO();
+        loadTexture(fileTex);
+
     }
+
+//    public Model(List<ShaderModuleData> shaderModuleDataList, List<Vector3f> vertices, Vector4f color, String filePath, String condition) {
+//        super(shaderModuleDataList, vertices, color);
+//        this.filePath = filePath;
+//        createModel(condition);
+//        setupVAOVBO();
+//    }
 
     public void createModel() {
         readModel();
@@ -239,11 +241,10 @@ public class Model extends Object {
     @Override
     public void drawSetup(Camera camera, Projection projection) {
         super.drawSetup(camera, projection);
-
         //bind nbo
-        glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
         glBindBuffer(GL_ARRAY_BUFFER, nbo);
-        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
+        glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
 
 //directional Light
         uniformsMap.setUniform("dirLight.direction", new Vector3f(-0.2f, -1.0f, -0.3f));

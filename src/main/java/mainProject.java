@@ -68,7 +68,7 @@ public class mainProject {
                                         , GL_FRAGMENT_SHADER)
                 ),
                 new ArrayList<>(),
-                new Vector4f(1f, 1f, 1f, 0f), "resources/Blender/Project/BackWall.obj"
+                new Vector4f(1f, 1f, 1f, 1f), "resources/Blender/Project/BackWall.obj", "resources/Blender/Project/Textures/level0.png"
         ));
         //Floor
         Environment.get(0).getChildObject().add(new Model(
@@ -82,7 +82,23 @@ public class mainProject {
                                         , GL_FRAGMENT_SHADER)
                 ),
                 new ArrayList<>(),
-                new Vector4f(1f, 1f, 1f, 0f), "resources/Blender/Project/FLoor.obj"
+                new Vector4f(1f, 1f, 1f, 0f), "resources/Blender/Project/FLoor.obj", "resources/Blender/Project/Textures/Carpet.jpg"
+        ));
+
+
+        //Extra Room
+        Environment.get(0).getChildObject().add(new Model(
+                Arrays.asList(
+                        //shaderFile lokasi menyesuaikan objectnya
+                        new ShaderProgram.ShaderModuleData
+                                ("resources/shaders/scene.vert"
+                                        , GL_VERTEX_SHADER),
+                        new ShaderProgram.ShaderModuleData
+                                ("resources/shaders/scene.frag"
+                                        , GL_FRAGMENT_SHADER)
+                ),
+                new ArrayList<>(),
+                new Vector4f(0.89f, 0.9f, 0.66f, 0f), "resources/Blender/Project/trap.obj"
         ));
 
         //Extra Room
@@ -97,22 +113,7 @@ public class mainProject {
                                         , GL_FRAGMENT_SHADER)
                 ),
                 new ArrayList<>(),
-                new Vector4f(1f, 1f, 1f, 0f), "resources/Blender/Project/trap.obj"
-        ));
-
-        //Extra Room
-        Environment.get(0).getChildObject().add(new Model(
-                Arrays.asList(
-                        //shaderFile lokasi menyesuaikan objectnya
-                        new ShaderProgram.ShaderModuleData
-                                ("resources/shaders/scene.vert"
-                                        , GL_VERTEX_SHADER),
-                        new ShaderProgram.ShaderModuleData
-                                ("resources/shaders/scene.frag"
-                                        , GL_FRAGMENT_SHADER)
-                ),
-                new ArrayList<>(),
-                new Vector4f(1f, 1f, 1f, 0f), "resources/Blender/Project/ceil.obj"
+                new Vector4f(0.83f, 0.87f, 0.65f, 0f), "resources/Blender/Project/ceil.obj"
         ));
 
         Environment.get(0).getChildObject().get(0).getChildObject().add(new Model(
@@ -126,7 +127,7 @@ public class mainProject {
                                         , GL_FRAGMENT_SHADER)
                 ),
                 new ArrayList<>(),
-                new Vector4f(1f, 1f, 1f, 0f), "resources/Blender/Project/light.obj"
+                new Vector4f(0.5f, 0.5f, 0.5f, 0f), "resources/Blender/Project/light.obj"
         ));
 
         Environment.get(0).getChildObject().get(0).getChildObject().add(new Model(
@@ -140,7 +141,7 @@ public class mainProject {
                                         , GL_FRAGMENT_SHADER)
                 ),
                 new ArrayList<>(),
-                new Vector4f(1f, 1f, 1f, 0f), "resources/Blender/Project/vent.obj"
+                new Vector4f(0f, 0.25f, 0f, 0f), "resources/Blender/Project/vent.obj"
         ));
 
         Environment.get(0).translateObject(0f,-1f,0f);
@@ -279,6 +280,13 @@ public class mainProject {
                 camera.moveRight(move);
                 objects.get(0).translateObject(move, 0f, 0f);
             }
+        }
+
+        if (window.isKeyPressed(GLFW_KEY_R)) {
+            Vector3f tempCenterPoint = objects.get(0).updateCenterPointObject();
+            objects.get(0).translateObject(tempCenterPoint.x * -1, tempCenterPoint.y * -1, tempCenterPoint.z * -1);
+            objects.get(0).rotateObjectAnimate((float) Math.toRadians(20), 0f, 1f, 0f);
+            objects.get(0).translateObject(tempCenterPoint.x * 1, tempCenterPoint.y * 1, tempCenterPoint.z * 1);
         }
 
 
