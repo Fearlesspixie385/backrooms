@@ -284,7 +284,7 @@ public class mainProject {
 
         if (window.getMousInput().isLeftButtonPressed()) {
             Vector2f displayVector = window.getMousInput().getDisplVec();
-            System.out.println(displayVector);
+
 //            camera.addRotation((float) Math.toRadians(displayVector.x * 0.1), (float) Math.toRadians(displayVector.y * 0.1));
             camera.addRotation(0, (float) Math.toRadians(displayVector.y * 0.1));
 //            objects.get(0).rotateObjectAnimate();

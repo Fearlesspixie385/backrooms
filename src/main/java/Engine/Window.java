@@ -100,6 +100,8 @@ public class Window {
         // Make the window visible
         glfwShowWindow(window);
 
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);// mouse invisible inf movement
+
         mouseInput = new MouseInput(window);
 
     }
@@ -116,7 +118,7 @@ public class Window {
             open = false;
 
         mouseInput.input();
-
+        glfwSetCursorPos(window, 0, 0);// mouse pos 0 0
     }
 
     public void cleanup(){

@@ -153,24 +153,19 @@ public class main {
         }
 
         if (window.isKeyPressed(GLFW_KEY_I)) {
-            objects.get(0).translateObject(0.0f, 0.0f,-0.1f);
-        }
-
-        if (window.isKeyPressed(GLFW_KEY_J)) {
-            objects.get(0).translateObject(-0.1f, 0.0f,0.0f);
-        }
-
-        if (window.isKeyPressed(GLFW_KEY_K)) {
             objects.get(0).translateObject(0.0f, 0.0f,0.1f);
         }
 
-        if (window.isKeyPressed(GLFW_KEY_L)) {
+        if (window.isKeyPressed(GLFW_KEY_J)) {
             objects.get(0).translateObject(0.1f, 0.0f,0.0f);
         }
 
-        if (window.getMousInput().isLeftButtonPressed()) {
-            Vector2f displayVector = window.getMousInput().getDisplVec();
-            camera.addRotation((float) Math.toRadians(displayVector.x * 0.1), (float) Math.toRadians(displayVector.y * 0.1));
+        if (window.isKeyPressed(GLFW_KEY_K)) {
+            objects.get(0).translateObject(0.0f, 0.0f,-0.1f);
+        }
+
+        if (window.isKeyPressed(GLFW_KEY_L)) {
+            objects.get(0).translateObject(-0.1f, 0.0f,0.0f);
         }
 
         if (window.getMousInput().getScroll().y != 0) {
@@ -215,6 +210,10 @@ public class main {
 //            glDepthRange(0.0f, 1.0f);
             glDisableVertexAttribArray(0);
 //            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            Vector2f displayVector = window.getMousInput().getDisplVec();
+            camera.addRotation((float) Math.toRadians(displayVector.x * 0.1), (float) Math.toRadians(displayVector.y * 0.1));
+
 
 
             for (Object object : objects) {

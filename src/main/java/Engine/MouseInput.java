@@ -12,11 +12,11 @@ public class MouseInput {
     private boolean inWindow;
     private boolean leftButtonPressed;
     private boolean leftButtonReleased;
-    private Vector2f previousPos;
     private boolean rightButtonPressed;
+    private long windowHandle;
 
     public MouseInput(long windowHandle) {
-        previousPos = new Vector2f(-1, -1);
+        this.windowHandle = windowHandle;
         currentPos = new Vector2f();
         scroll = new Vector2f();
         displVec = new Vector2f();
@@ -60,9 +60,14 @@ public class MouseInput {
     public void input() {
         displVec.x = 0;
         displVec.y = 0;
-        if (previousPos.x > 0 && previousPos.y > 0 && inWindow) {
-            double deltax = currentPos.x - previousPos.x;
-            double deltay = currentPos.y - previousPos.y;
+        if (inWindow) {
+            glfwSetCursorPosCallback(windowHandle, (handle, xpos, ypos) -> {
+                currentPos.x = (float) xpos;
+                currentPos.y = (float) ypos;
+            });
+            System.out.println(currentPos);;
+            double deltax = currentPos.x;
+            double deltay = currentPos.y;
             boolean rotateX = deltax != 0;
             boolean rotateY = deltay != 0;
             if (rotateX) {
@@ -72,8 +77,8 @@ public class MouseInput {
                 displVec.x = (float) deltay;
             }
         }
-        previousPos.x = currentPos.x;
-        previousPos.y = currentPos.y;
+
+
     }
 
     public boolean isLeftButtonPressed() {
