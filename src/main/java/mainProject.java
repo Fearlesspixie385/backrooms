@@ -357,7 +357,10 @@ public class mainProject {
 
             Vector2f displayVector = window.getMousInput().getDisplVec();
             camera.addRotation((float) Math.toRadians(displayVector.x * 0.1), (float) Math.toRadians(displayVector.y * 0.1));
-
+            objects.get(0).translateObject(tempCenterPoint.x * -1, tempCenterPoint.y * -1, tempCenterPoint.z * -1);
+            objects.get(0).rotateObjectAnimate((float) Math.toRadians(-displayVector.y * 0.1), 0f, 1f, 0f);
+            objects.get(0).translateObject(tempCenterPoint.x * 1, tempCenterPoint.y * 1, tempCenterPoint.z * 1);
+            
 //            for (Object object : objectsRectangle) {
 //                object.draw(camera, projection);
 //            }
