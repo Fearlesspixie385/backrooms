@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="grafkomProjct-main" />
         <module name="untitled" />
+        <module name="backrooms" />
       </profile>
     </annotationProcessing>
   </component>

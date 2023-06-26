@@ -28,8 +28,9 @@ public class mainProject {
     private float posX = 0.0f;
     private float posY = 0.025f;
     private float posZ = 3f;
-    private boolean state = false;
+    private boolean state = true;
     private float rotate = 0f;
+    private int FPSorTPSorCinemaMode = 0;// 0 fps 1 tps 2 cinema
 
 
     private ArrayList<Double> valueArray = new ArrayList<>();
@@ -227,11 +228,6 @@ public class mainProject {
                 z >= Environment.get(0).updateCenterPointObject().get(2) - 8.1 &&
                 x >= Environment.get(0).updateCenterPointObject().get(0) -7.3 &&
                 x <= Environment.get(0).updateCenterPointObject().get(0) -6.95);
-//        boolean trap =
-//                (z <= Environment.get(0).updateCenterPointObject().get(2) + 9.5 &&
-//                        z >= Environment.get(0).updateCenterPointObject().get(2) + 3.6 &&
-//                        x >= Environment.get(0).updateCenterPointObject().get(0) -5.7 &&
-//                        x <= Environment.get(0).updateCenterPointObject().get(0) -1.3);
         boolean trap =
                 (z >= Environment.get(0).updateCenterPointObject().get(2) + 3.6 &&
                 x >= Environment.get(0).updateCenterPointObject().get(0) -1.6 &&
@@ -251,71 +247,84 @@ public class mainProject {
                 x >= Environment.get(0).updateCenterPointObject().get(0) -5.7 &&
                 x <= Environment.get(0).updateCenterPointObject().get(0) -5.1)
                 ;
-        boolean floorCollide =
-                y >= Environment.get(0).updateCenterPointObject().get(2) + 9.5 &&
-                x >= Environment.get(0).updateCenterPointObject().get(0) -4.5 &&
-                x <= Environment.get(0).updateCenterPointObject().get(0) -5.1;
         if(borderWall || wall1 || wall2 || wall3 || TWall || SideWall || trap){
             return true;
         }
-//        if (getDist(x, y, z, Environment.get(0).updateCenterPointObject().get(0), Environment.get(0).updateCenterPointObject().get(1), Environment.get(0).updateCenterPointObject().get(2)) >= 10){
-//            return true;
-//        }
         return false;
     }
 
 
     public void move(){
-        float move = 0.025f;
+        float move = 0.015f;
         float x = objects.get(0).updateCenterPointObject().get(0);
         float y = objects.get(0).updateCenterPointObject().get(1);
         float z = objects.get(0).updateCenterPointObject().get(2);
+
+        float movex = 0;
+        float movez = 0;
+
         //Maju
         if (window.isKeyPressed(GLFW_KEY_W)) {
             if (!checkCollide(x, y, z - 0.1f)) {
-                camera.moveForward(move);
-                objects.get(0).translateObject(0f, 0f, -move);
+                movez += -move;
             }
         }
         //Kiri
         if (window.isKeyPressed(GLFW_KEY_A)) {
             if (!checkCollide(x-0.1f, y, z)) {
-                camera.moveLeft(move);
-                objects.get(0).translateObject(-move, 0f, 0f);
+                movex += -move;
             }
         }
         //Mundur
         if (window.isKeyPressed(GLFW_KEY_S)) {
             if (!checkCollide(x, y, z + 0.1f)) {
-                camera.moveBackwards(move);
-                objects.get(0).translateObject(0f, 0f, move);
+                movez += move;
             }
         }
         //Kanan
         if (window.isKeyPressed(GLFW_KEY_D)) {
             if (!checkCollide(x+0.1f, y, z)) {
-                camera.moveRight(move);
-                objects.get(0).translateObject(move, 0f, 0f);
+                movex += move;
             }
         }
 
-        if (window.isKeyPressed(GLFW_KEY_R)) {
-            Vector3f tempCenterPoint = objects.get(0).updateCenterPointObject();
-            objects.get(0).translateObject(tempCenterPoint.x * -1, tempCenterPoint.y * -1, tempCenterPoint.z * -1);
-            objects.get(0).rotateObjectAnimate((float) Math.toRadians(20), 0f, 1f, 0f);
-            objects.get(0).translateObject(tempCenterPoint.x * 1, tempCenterPoint.y * 1, tempCenterPoint.z * 1);
+        if (window.isKeyPressed(GLFW_KEY_I)) {
+            camera.moveForward(move);
+
         }
 
-
-        if (window.getMousInput().isLeftButtonPressed()) {
-            Vector2f displayVector = window.getMousInput().getDisplVec();
-            System.out.println(displayVector);
-//            camera.addRotation((float) Math.toRadians(displayVector.x * 0.1), (float) Math.toRadians(displayVector.y * 0.1));
-            camera.addRotation(0, (float) Math.toRadians(displayVector.y * 0.1));
-//            objects.get(0).rotateObjectAnimate();
+        if (window.isKeyPressed(GLFW_KEY_J)) {
+            camera.moveLeft(move);
         }
 
+        if (window.isKeyPressed(GLFW_KEY_K)) {
+            camera.moveBackwards(move);
+        }
 
+        if (window.isKeyPressed(GLFW_KEY_L)) {
+            camera.moveRight(move);
+        }
+            //SCP moves
+        if (window.isKeyPressed(GLFW_KEY_Z)) {
+            objects.get(1).translateObjectAnimate(0f, 0f, 0.5f);
+        }
+
+        objects.get(0).translateObjectAnimate(movex, 0f, movez);
+
+
+        if (window.isKeyPressed(GLFW_KEY_F)) {
+            FPSorTPSorCinemaMode = 0;
+            state = true;
+        }
+
+        if (window.isKeyPressed(GLFW_KEY_T)) {
+            FPSorTPSorCinemaMode = 1;
+        }
+
+        if (window.isKeyPressed(GLFW_KEY_C)) {
+            FPSorTPSorCinemaMode = 2;
+            state = true;
+        }
     }
     public void input(){
         move();
@@ -344,15 +353,52 @@ public class mainProject {
             glDisableVertexAttribArray(0);
 //            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            Vector3f tempCenterPoint = objects.get(0).updateCenterPointObject();
+            if (FPSorTPSorCinemaMode == 0) {
+
+                    camera.setPosition(tempCenterPoint.x, tempCenterPoint.y + 1.3f, tempCenterPoint.z);
+
+                    Vector2f displayVector = window.getMousInput().getDisplVec();
+                    camera.addRotation((float) Math.toRadians(displayVector.x * 0.1), (float) Math.toRadians(displayVector.y * 0.1));
+
+                    objects.get(0).translateObject(tempCenterPoint.x * -1, tempCenterPoint.y * -1, tempCenterPoint.z * -1);
+                    objects.get(0).rotateObjectAnimate((float) Math.toRadians(-displayVector.y * 0.1), 0f, 1f, 0f);
+                    objects.get(0).translateObject(tempCenterPoint.x * 1, tempCenterPoint.y * 1, tempCenterPoint.z * 1);
+
+
+
+            }
+
+            else if (FPSorTPSorCinemaMode == 1) {
+
+                Vector2f displayVector = window.getMousInput().getDisplVec();
+                camera.addRotation(0, (float) Math.toRadians(displayVector.y * 0.1));
+
+                objects.get(0).translateObject(tempCenterPoint.x * -1, tempCenterPoint.y * -1, tempCenterPoint.z * -1);
+                objects.get(0).rotateObjectAnimate((float) Math.toRadians(-displayVector.y * 0.1), 0f, 1f, 0f);
+                objects.get(0).translateObject(tempCenterPoint.x * 1, tempCenterPoint.y * 1, tempCenterPoint.z * 1);
+
+                camera.setPosition(tempCenterPoint.x - (1.2f * (float) Math.sin(camera.getRotation().y)), tempCenterPoint.y + 1.3f, tempCenterPoint.z + 1.2f * (float) Math.cos(camera.getRotation().y));
+
+
+            }
+
+            else if (FPSorTPSorCinemaMode == 2) {
+
+                Vector2f displayVector = window.getMousInput().getDisplVec();
+                camera.addRotation((float) Math.toRadians(displayVector.x * 0.1), (float) Math.toRadians(displayVector.y * 0.1));
+
+            }
+
             for (Object object : Environment) {
                 object.draw(camera, projection);
             }
             for (Object object : objects) {
                 object.draw(camera, projection);
             }
-            Vector3f tempCenterPoint = objects.get(0).updateCenterPointObject();
 
-            camera.setPosition(tempCenterPoint.x,tempCenterPoint.y+1.3f,tempCenterPoint.z);
+
+
 
 //            for (Object object : objectsRectangle) {
 //                object.draw(camera, projection);

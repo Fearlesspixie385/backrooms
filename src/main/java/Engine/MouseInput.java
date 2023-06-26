@@ -12,12 +12,14 @@ public class MouseInput {
     private boolean inWindow;
     private boolean leftButtonPressed;
     private boolean leftButtonReleased;
-    private Vector2f previousPos;
     private boolean rightButtonPressed;
+    private Vector2f previousPos;
+    private long windowHandle;
 
     public MouseInput(long windowHandle) {
-        previousPos = new Vector2f(-1, -1);
+        this.windowHandle = windowHandle;
         currentPos = new Vector2f();
+        previousPos = new Vector2f();
         scroll = new Vector2f();
         displVec = new Vector2f();
         leftButtonPressed = false;
@@ -28,11 +30,13 @@ public class MouseInput {
         glfwSetCursorPosCallback(windowHandle, (handle, xpos, ypos) -> {
             currentPos.x = (float) xpos;
             currentPos.y = (float) ypos;
+            previousPos.x = (float) xpos;
+            previousPos.y = (float) ypos;
         });
         glfwSetCursorEnterCallback(windowHandle, (handle, entered) -> inWindow = entered);
-        glfwSetScrollCallback(windowHandle, (handle, xoffset, yoffset)->{
-            scroll.x = (float)xoffset;
-            scroll.y = (float)yoffset;
+        glfwSetScrollCallback(windowHandle, (handle, xoffset, yoffset) -> {
+            scroll.x = (float) xoffset;
+            scroll.y = (float) yoffset;
         });
         glfwSetMouseButtonCallback(windowHandle, (handle, button, action, mode) -> {
             leftButtonPressed = button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS;
@@ -60,20 +64,21 @@ public class MouseInput {
     public void input() {
         displVec.x = 0;
         displVec.y = 0;
-        if (previousPos.x > 0 && previousPos.y > 0 && inWindow) {
+        if (inWindow) {
+            glfwSetCursorPosCallback(windowHandle, (handle, xpos, ypos) -> {
+                currentPos.x = (float) xpos;
+                currentPos.y = (float) ypos;
+            });
+
             double deltax = currentPos.x - previousPos.x;
             double deltay = currentPos.y - previousPos.y;
-            boolean rotateX = deltax != 0;
-            boolean rotateY = deltay != 0;
-            if (rotateX) {
-                displVec.y = (float) deltax;
-            }
-            if (rotateY) {
-                displVec.x = (float) deltay;
-            }
+
+            displVec.y = (float) deltax;
+            displVec.x = (float) deltay;
+
         }
-        previousPos.x = currentPos.x;
-        previousPos.y = currentPos.y;
+
+
     }
 
     public boolean isLeftButtonPressed() {
